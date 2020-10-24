@@ -167,6 +167,25 @@ class User(Base):
         return self.name
 
 
+class Pseudonym(Base):
+    """
+    Модель "Псевдонимы"
+    """
+
+    __tablename__ = 'pseudonyms'
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(ForeignKey('users.id'))
+    user = relationship('User')
+    sis_user_id = Column(String(255))
+
+    def __repr__(self):
+        return '<Pseudonym {} (id={})>'.format(self, self.id)
+    
+    def __str__(self):
+        return str(self.user)
+
+
 class Quiz(Base):
     """
     Модель "Тест"

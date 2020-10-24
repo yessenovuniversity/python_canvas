@@ -184,3 +184,22 @@ class Quiz(Base):
     
     def __str__(self):
         return self.name
+
+
+class Enrollment(Base):
+    __tablename__ = 'enrollments'
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(ForeignKey('users.id'))
+    user = relationship('User')
+    course_id = Column(ForeignKey('courses.id'))
+    course = relationship('Course')
+    type = Column(String(255))
+    course_section_id = Column(ForeignKey('course_sections.id'))
+    course_section = relationship('CourseSection')
+
+    def __repr__(self):
+        return '<Enrollment {} (id={})>'.format(self, self.id)
+    
+    def __str__(self):
+        return str(self.user)

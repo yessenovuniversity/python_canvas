@@ -128,7 +128,7 @@ class Submission(Base):
         return '<Submission {} (id={})>'.format(self, self.id)
     
     def __str__(self):
-        return self.score
+        return str(self.score)
 
 
 class Assignment(Base):
@@ -162,6 +162,25 @@ class User(Base):
 
     def __repr__(self):
         return '<User {} (id={})>'.format(self, self.id)
+    
+    def __str__(self):
+        return self.name
+
+
+class Quiz(Base):
+    """
+    Модель "Тест"
+    """
+
+    __tablename__ = 'quizzes'
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String(255))
+    assignment_id = Column(ForeignKey('assignments.id'))
+    assignment = relationship('Assignment')
+
+    def __repr__(self):
+        return '<Quiz {} (id={})>'.format(self, self.id)
     
     def __str__(self):
         return self.name

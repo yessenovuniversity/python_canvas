@@ -197,6 +197,7 @@ class Enrollment(Base):
     type = Column(String(255))
     course_section_id = Column(ForeignKey('course_sections.id'))
     course_section = relationship('CourseSection')
+    workflow_state = Column(String(255))
 
     def __repr__(self):
         return '<Enrollment {} (id={})>'.format(self, self.id)

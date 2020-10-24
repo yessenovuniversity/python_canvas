@@ -70,7 +70,7 @@ class ContextModule(Base):
 class ContentTag(Base):
     __tablename__ = 'content_tags'
 
-    id = Column(Integer, primary_Key=True)
+    id = Column(Integer, primary_key=True)
     content_id = Column(Integer)
     content_type = Column(String(255))
     title = Column(String)
@@ -83,3 +83,85 @@ class ContentTag(Base):
     
     def __str__(self):
         return self.title
+
+
+class Score(Base):
+    """
+    Модель "Оценки"
+    """
+
+    __tablename__ = 'scores'
+
+    id = Column(Integer, primary_key=True)
+    enrollment_id = Column(ForeignKey('enrollments.id'))
+    workflow_state = Column(String(255))
+    current_score = Column(Float)
+    final_score = Column(Float)
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
+
+    def __repr__(self):
+        return '<Score {} (id={})>'.format(self, self.id)
+    
+    def __str__(self):
+        return self.current_score
+
+
+class Submission(Base):
+    """
+    Модель "Отправленные работы"
+    """
+
+    __tablename__ = 'submissions'
+
+    id = Column(Integer, primary_key=True)
+    score = Column(Float)
+    assignment_id = Column(ForeignKey('assignments.id'))
+    assignment = relationship('Assignment')
+    user_id = Column(ForeignKey('users.id'))
+    user = relationship('User')
+    workflow_state = Column(String(255))
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
+
+    def __repr__(self):
+        return '<Submission {} (id={})>'.format(self, self.id)
+    
+    def __str__(self):
+        return self.score
+
+
+class Assignment(Base):
+    """
+    Модель "Задание"
+    """
+
+    __tablename__ = 'assignments'
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String(255))
+    submission_types = Column(String(255))
+    workflow_state = Column(String(255))
+
+    def __repr__(self):
+        return '<Assignment {} (id={})>'.format(self, self.id)
+    
+    def __str__(self):
+        return self.title
+
+
+class User(Base):
+    """
+    Модель "Пользователь"
+    """
+
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
+
+    def __repr__(self):
+        return '<User {} (id={})>'.format(self, self.id)
+    
+    def __str__(self):
+        return self.name

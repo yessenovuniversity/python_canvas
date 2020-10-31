@@ -177,6 +177,7 @@ class Pseudonym(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(ForeignKey('users.id'))
     user = relationship('User')
+    position = Column(Integer)
     sis_user_id = Column(String(255))
 
     def __repr__(self):

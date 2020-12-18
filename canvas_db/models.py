@@ -198,7 +198,7 @@ class OverrideStudent(Base):
     assignment = relationship('Assignment')
     override_id = Column('assignment_override_id', ForeignKey('assignment_overrides.id'))
     override = relationship('Override')
-    user_id = Colunm(ForeignKey('users.id'))
+    user_id = Column(ForeignKey('users.id'))
     user = relationship('User')
     quiz_id = Column(ForeignKey('quizzes.id'))
     quiz = relationship('Quiz')

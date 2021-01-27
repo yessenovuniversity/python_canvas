@@ -150,6 +150,67 @@ class Assignment(Base):
         return self.title
 
 
+class Override(Base):
+    """
+    Модель "Назначение"
+    """
+    __tablename__ = 'assignment_overrides'
+
+    id = Column(Integer, primary_key=True)
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
+    assignment_id = Column(ForeignKey('assignments.id'))
+    assignment = relationship('Assignment')
+    assignment_version = Column(Integer)
+    set_type = Column(String)
+    set_id = Column(Integer)
+    title = Column(String)
+    workflow_state = Column(String)
+    due_at_overridden = Column(Boolean)
+    due_at = Column(DateTime)
+    all_day = Column(Boolean)
+    all_day_date = Column(DateTime)
+    unlock_at_overridden = Column(Boolean)
+    unlock_at = Column(DateTime)
+    lock_at_overridden = Column(Boolean)
+    lock_at = Column(DateTime)
+    quiz_id = Column(ForeignKey('quizzes.id'))
+    quiz = relationship('Quiz')
+    quiz_version = Column(Integer)
+
+    def __repr__(self):
+        return '<Override {} (id={} assignment_id={} workflow_state={} quiz_id={})>'.format(self, self.id, self.assignment_id, self.workflow_state, self.quiz_id)
+    
+    def __str__(self):
+        return self.title
+
+
+class OverrideStudent(Base):
+    """
+    Модель "Студент в Назначении"
+    """
+    __tablename__ = 'assignment_override_students'
+
+    id = Column(Integer, primary_key=True)
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
+    assignment_id = Column(ForeignKey('assignments.id'))
+    assignment = relationship('Assignment')
+    override_id = Column('assignment_override_id', ForeignKey('assignment_overrides.id'))
+    override = relationship('Override')
+    user_id = Column(ForeignKey('users.id'))
+    user = relationship('User')
+    quiz_id = Column(ForeignKey('quizzes.id'))
+    quiz = relationship('Quiz')
+    workflow_state = Column(String)
+
+    def __repr__(self):
+        return '<OverrideStudent {} (id={} assignment_id={} override_id={} user_id={} quiz_id={} workflow_state={}>'.format(self, self.id, self.assignment_id, self.override_id, self.user_id, self.quiz_id, self.workflow_state)
+    
+    def __str__(self):
+        return str(self.user)
+
+
 class User(Base):
     """
     Модель "Пользователь"

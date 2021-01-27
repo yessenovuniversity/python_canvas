@@ -177,6 +177,7 @@ class Pseudonym(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(ForeignKey('users.id'))
     user = relationship('User')
+    position = Column(Integer)
     sis_user_id = Column(String(255))
 
     def __repr__(self):
@@ -217,6 +218,8 @@ class Enrollment(Base):
     course_section_id = Column(ForeignKey('course_sections.id'))
     course_section = relationship('CourseSection')
     workflow_state = Column(String(255))
+    sis_pseudonym_id = Column(ForeignKey('pseudonyms.id'))
+    sis_pseudonym = relationship('Pseudonym')
 
     def __repr__(self):
         return '<Enrollment {} (id={})>'.format(self, self.id)

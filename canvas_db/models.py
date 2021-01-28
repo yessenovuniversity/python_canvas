@@ -84,6 +84,25 @@ class SisBatch(Base):
         return self.id
 
 
+class Role(Base):
+    """
+    Модель "Роли"
+    """
+    __tablename__ = 'roles'
+
+    # Идентификатор
+    id = Column(Integer, primary_key=True)
+
+    # Наименование
+    name = Column(String(255))
+
+    def __repr__(self):
+        return '<Role {} (id={})>'.format(self, self.id)
+    
+    def __str__(self):
+        return self.name
+
+
 class Course(Base):
     """
     Модель "Курс"
@@ -511,19 +530,86 @@ class Quiz(Base):
 
 
 class Enrollment(Base):
+    """
+    Модель "Участник курса"
+    """
     __tablename__ = 'enrollments'
 
+    # Идентификатор
     id = Column(Integer, primary_key=True)
+
+    # Пользователь
     user_id = Column(ForeignKey('users.id'))
-    user = relationship('User')
+    user = relationship('User', foreign_keys='Enrollment.user_id')
+
+    # Курс
     course_id = Column(ForeignKey('courses.id'))
     course = relationship('Course')
+
+    # Тип
+    # StudentEnrollment - студент
+    # TeacherEnrollment - преподаватель
     type = Column(String(255))
+
+    # Уникальный идентификатор
+    uuid = Column(String(255))
+
+    # Статус
+    # active - Активный
+    # deleted - Удаленный
+    workflow_state = Column(String(255))
+
+    # Дата и время создания
+    created_at = Column(DateTime)
+
+    # Дата и время изменения
+    updated_at = Column(DateTime)
+
+    associated_user_id = Column(ForeignKey('users.id'))
+    associated_user = relationship('User', foreign_keys='Enrollment.associated_user_id')
+
+    sis_batch_id = Column(ForeignKey('sis_batches.id'))
+    sis_batch = relationship('SisBatch')
+
+    start_at = Column(DateTime)
+    end_at = Column(DateTime)
+
+    # Секция курса
     course_section_id = Column(ForeignKey('course_sections.id'))
     course_section = relationship('CourseSection')
-    workflow_state = Column(String(255))
+
+    # Корневая учетная запись
+    root_account_id = Column(ForeignKey('accounts.id'))
+    root_account = relationship('Account')
+
+    completed_at = Column(DateTime)
+
+    self_enrolled = Column(Boolean)
+
+    grade_publishing_status = Column(String(255))
+
+    last_publish_attempt_at = Column(DateTime)
+
+    stuck_sis_fields = Column(String)
+
+    grade_publishing_message = Column(String)
+
+    limit_privileges_to_course_section = Column(Boolean)
+
+    last_activity_at = Column(DateTime)
+
+    total_activity_time = Column(Integer)
+
+    # Роль
+    role_id = Column(ForeignKey('roles.id'))
+    role = relationship('Role')
+
+    graded_at = Column(DateTime)
+
     sis_pseudonym_id = Column(ForeignKey('pseudonyms.id'))
     sis_pseudonym = relationship('Pseudonym')
+
+    last_attended_at = Column(DateTime)
 
     def __repr__(self):
         return '<Enrollment {} (id={})>'.format(self, self.id)

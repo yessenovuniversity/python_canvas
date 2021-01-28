@@ -7,16 +7,215 @@ from .orm import get_base
 Base = get_base()
 
 
+class Account(Base):
+    """
+    Модель "Учетная запись"
+    """
+    __tablename__ = 'accounts'
+
+    # Идентификатор
+    id = Column(Integer, primary_key=True)
+
+    # Наименование
+    name = Column(String)
+
+    def __repr__(self):
+        return '<Account {} (id={})>'.format(self, self.id)
+    
+    def __str__(self):
+        return self.name
+
+
+class Wiki(Base):
+    """
+    Модель "Wiki"
+    """
+    __tablename__ = 'wikis'
+
+    # Идентификатор
+    id = Column(Integer, primary_key=True)
+
+    # Заголовок
+    title = Column(String(255))
+
+    def __repr__(self):
+        return '<Wiki {} (id={})>'.format(self, self.id)
+    
+    def __str__(self):
+        return self.title
+
+
+class EnrollmentTerm(Base):
+    """
+    Модель "EnrollmentTerm"
+    """
+    __tablename__ = 'enrollment_terms'
+
+    # Идентификатор
+    id = Column(Integer, primary_key=True)
+
+    # Корневая учетная запись
+    root_account_id = Column(ForeignKey('accounts.id'))
+    root_account = relationship('Account')
+
+    # Наименование
+    name = Column(String(255))
+
+    def __repr__(self):
+        return '<EnrollmentTerm {} (id={})>'.format(self, self.id)
+    
+    def __str__(self):
+        return self.name
+
+
+class SisBatch(Base):
+    """
+    Модель "SisBatch"
+    """
+    __tablename__ = 'sis_batches'
+
+    # Идентификатор
+    id = Column(Integer, primary_key=True)
+
+    def __repr__(self):
+        return '<SisBatch {} (id={})>'.format(self, self.id)
+    
+    def __str__(self):
+        return self.id
+
+
 class Course(Base):
     """
     Модель "Курс"
     """
-
     __tablename__ = 'courses'
 
+    # Идентификатор
     id = Column(Integer, primary_key=True)
+
+    # Наименование курса
     name = Column(String(255))
+
+    # Учетная запись
+    account_id = Column(ForeignKey('accounts.id'))
+    account = relationship('Account')
+
+    group_weighting_scheme = Column(String(255))
+
+    # Статус
+    workflow_state = Column(String(255))
+
+    # Уникальный идентификатор
+    uuid = Column(String(255))
+
+    start_at = Column(DateTime)
+
+    conclude_at = Column(DateTime)
+
+    grading_standard_id = Column(Integer)
+
+    # Публичный
+    is_public = Column(Boolean)
+
+    allow_student_wiki_edits = Column(Boolean)
+
+    # Дата и время создания
+    created_at = Column(DateTime)
+
+    # Дата и время изменения
+    updated_at = Column(DateTime)
+
+    show_public_context_messages = Column(Boolean)
+
+    syllabus_body = Column(String)
+
+    allow_student_forum_attachments = Column(Boolean)
+
+    default_wiki_editing_roles = Column(String(255))
+
+    # Wiki
+    wiki_id = Column(ForeignKey('wikis.id'))
+    wiki = relationship('Wiki')
+
+    allow_student_organized_groups = Column(Boolean)
+
+    # Код курса
+    course_code = Column(String(255))
+
+    # Вид по-умолчанию
+    default_view = Column(String(255))
+
+    abstract_course_id = Column(Integer)
+
+    # Корневая учетная запись
+    root_account_id = Column(ForeignKey('accounts.id'))
+    root_account = relationship('Account')
+
+    enrollment_term_id = Column(ForeignKey('enrollment_terms.id'))
+    enrollment_term = relationship('EnrollmentTerm')
+
+    # SIS-идентификатор
     sis_source_id = Column(String(255))
+
+    sis_batch_id = Column(ForeignKey('sis_batches.id'))
+    sis_batch = relationship('SisBatch')
+
+    open_enrollment = Column(Boolean)
+
+    storage_quota = Column(Integer)
+
+    tab_configuration = Column(String)
+
+    # Разрешить комментарии к Wiki
+    allow_wiki_comments = Column(Boolean)
+
+    turnitin_comments = Column(String)
+
+    self_enrollment = Column(Boolean)
+
+    # Лицензия
+    license = Column(String(255))
+
+    indexed = Column(Boolean)
+
+    restrict_enrollments_to_course_dates = Column(Boolean)
+
+    template_course_id = Column(Integer)
+
+    # Локализация
+    locale = Column(String(255))
+
+    # Настройки курса
+    settings = Column(String)
+
+    replacement_course_id = Column(Integer)
+
+    stuck_sis_fields = Column(String)
+
+    # Публичное описание
+    public_description = Column(String)
+
+    self_enrollment_code = Column(String(255))
+
+    self_enrollment_limit = Column(Integer)
+
+    integration_id = Column(String(255))
+
+    # Временная зона
+    time_zone = Column(String(255))
+
+    lti_context_id = Column(String(255))
+
+    turnitin_id = Column(Integer)
+
+    show_announcements_on_home_page = Column(Boolean)
+
+    home_page_announcement_limit = Column(Integer)
+
+    latest_outcome_import_id = Column(Integer)
+
+    grade_passback_setting = Column(String(255))
+
 
     def __repr__(self):
         return '<Course {} (id={}, sis_source_id={})>'.format(self, self.id, self.sis_source_id)

@@ -98,7 +98,7 @@ class Course(Base):
 
     # Учетная запись
     account_id = Column(ForeignKey('accounts.id'))
-    account = relationship('Account')
+    account = relationship('Account', foreign_keys='Course.account_id')
 
     group_weighting_scheme = Column(String(255))
 
@@ -149,7 +149,7 @@ class Course(Base):
 
     # Корневая учетная запись
     root_account_id = Column(ForeignKey('accounts.id'))
-    root_account = relationship('Account')
+    root_account = relationship('Account', foreign_keys='Course.root_account_id')
 
     enrollment_term_id = Column(ForeignKey('enrollment_terms.id'))
     enrollment_term = relationship('EnrollmentTerm')

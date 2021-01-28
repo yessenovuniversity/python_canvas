@@ -228,15 +228,59 @@ class CourseSection(Base):
     """
     Модель "Секция курса"
     """
-
     __tablename__ = 'course_sections'
 
+    # Идентификатор
     id = Column(Integer, primary_key=True)
+
+    # SIS-идентификатор
     sis_source_id = Column(String(255))
+
+    sis_batch_id = Column(ForeignKey('sis_batches.id'))
+    sis_batch = relationship('SisBatch')
+
+    # Курс
     course_id = Column(ForeignKey('courses.id'))
     course = relationship('Course')
+
+    # Корневая учетная запись
+    root_account_id = Column(ForeignKey('accounts.id'))
+    root_account = relationship('Account')
+
+    enrollment_term_id = Column(ForeignKey('enrollment_terms.id'))
+    enrollment_term = relationship('EnrollmentTerm')
+
+    # Наименование
     name = Column(String(255))
+
+    # Секция по-умолчанию
+    default_section = Column(Boolean)
+
+    accepting_enrollments = Column(Boolean)
+
+    can_manually_enroll = Column(Boolean)
+
+    start_at = Column(DateTime)
+    end_at = Column(DateTime)
+
+    # Дата и время создания
+    created_at = Column(DateTime)
+
+    # Дата и время изменения
+    updated_at = Column(DateTime)
+
+    # Статус
+    # active - Активный
+    # deleted - Удаленный
     workflow_state = Column(String(255))
+
+    restrict_enrollments_to_section_dates = Column(Boolean)
+
+    nonxlist_course_id = Column(Integer)
+
+    stuck_sis_fields = Column(String)
+
+    integration_id = Column(String(255))
 
     def __repr__(self):
         return '<CourseSection {} (id={}, sis_source_id={})>'.format(self, self.id, self.sis_source_id)

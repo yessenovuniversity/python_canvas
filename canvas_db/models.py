@@ -616,3 +616,36 @@ class Enrollment(Base):
     
     def __str__(self):
         return str(self.user)
+
+
+class EnrollmentState(Base):
+    """
+    Модель "EnrollmentState"
+    """
+    __tablename__ = 'enrollment_states'
+
+    # Участник
+    enrollment_id = Column(ForeignKey('enrollments.id'))
+    enrollment = relationship('Enrollment')
+
+    state = Column(String(255))
+
+    state_is_current = Column(Boolean)
+
+    state_started_at = Column(DateTime)
+
+    state_valid_until = Column(DateTime)
+
+    restricted_access = Column(Boolean)
+
+    access_is_current = Column(Boolean)
+
+    lock_version = Column(Integer)
+
+    updated_at = Column(DateTime)
+
+    def __repr__(self):
+        return '<EnrollmentState {} (id={})>'.format(self, self.id)
+    
+    def __str__(self):
+        return str(self.enrollment)

@@ -625,7 +625,7 @@ class EnrollmentState(Base):
     __tablename__ = 'enrollment_states'
 
     # Участник
-    enrollment_id = Column(ForeignKey('enrollments.id'))
+    enrollment_id = Column(ForeignKey('enrollments.id'), primary_key=True)
     enrollment = relationship('Enrollment')
 
     state = Column(String(255))

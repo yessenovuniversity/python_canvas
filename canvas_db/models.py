@@ -402,6 +402,10 @@ class Assignment(Base):
 
     id = Column(Integer, primary_key=True)
     title = Column(String(255))
+
+    # Максимальный балл
+    points_possible = Column(Float)
+
     submission_types = Column(String(255))
     workflow_state = Column(String(255))
 
